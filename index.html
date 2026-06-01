@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHER 2026 — Northern Mindanao AI & Autonomous Systems Annual Report</title>
+  <meta name="description" content="The 2026 Annual Report on Artificial Intelligence, distributed computing, and autonomous ecological systems across Northern Mindanao.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Fluid Shader Canvas -->
+  <canvas id="fluidCanvas" class="fluid-canvas" aria-hidden="true"></canvas>
+
+  <!-- Masthead -->
+  <header class="annual-masthead">
+    <div class="masthead-inner">
+      <div class="brand">
+        <span class="brand-tag">VOL. III &bull; 2026 ANNUAL EDITION</span>
+        <span class="brand-title">AETHER REPORT &bull; NORTHERN MINDANAO</span>
+      </div>
+      <nav class="masthead-nav">
+        <a href="#prologue">Prologue</a>
+        <a href="#compute">Compute Topology</a>
+        <a href="#inference">Inference Latency</a>
+        <a href="#auditor">In-Context AI Agent</a>
+      </nav>
+      <div class="readout-pill">
+        <span class="live-pulse"></span>
+        <span>Living Document &bull; Continuous Telemetry</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="prologue">
+    <div class="editorial-container">
+      <span class="section-kicker">AUTONOMOUS REGIONAL SYSTEMS</span>
+      <h1 class="hero-title">The State of Intelligence & Compute in Northern Mindanao.</h1>
+      <p class="hero-standfirst">
+        In 2026, artificial intelligence shifted from centralized server farms to resilient regional edge meshes. From Cagayan de Oro’s automated watershed telemetry to Bukidnon’s precision agricultural drones, intelligence has become an integral civic utility.
+      </p>
+
+      <!-- Key Macro Indicators (Stripe Press Minimalist Style) -->
+      <div class="macro-grid">
+        <div class="macro-card">
+          <span class="m-stat">18.4<small>PFLOPS</small></span>
+          <span class="m-title">Regional Clean Compute</span>
+          <span class="m-desc">Powered by 100% Agus-Pulangi hydropower baseload</span>
+        </div>
+        <div class="macro-card">
+          <span class="m-stat">4.2<small>ms</small></span>
+          <span class="m-title">Median Edge Inference</span>
+          <span class="m-desc">Across 14 municipal telemetry clusters</span>
+        </div>
+        <div class="macro-card">
+          <span class="m-stat">128<small>k</small></span>
+          <span class="m-title">Active Mesh Telemetry Nodes</span>
+          <span class="m-desc">Soil, marine, and power distribution sensors</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter 1: Compute Topology & Clean Hydro Baselines -->
+  <section class="story-chapter" id="compute">
+    <div class="editorial-container">
+      <div class="split-layout">
+        <div class="narrative-col">
+          <span class="section-kicker">INFRASTRUCTURE ARCHITECTURE</span>
+          <h2>Zero-carbon inference anchored by equatorial river cascades.</h2>
+          <p>
+            While global data centers battle immense thermal constraints, Northern Mindanao leveraged its natural topographical elevation. Compute clusters deployed along the Bukidnon-Misamis Oriental plateau tap into direct run-of-river cooling and dedicated hydropower feeders.
+          </p>
+          <div class="stat-callout">
+            <span class="callout-num">91.4%</span>
+            <span class="callout-txt">Reduction in grid carbon intensity compared to cloud-centralized training pipelines.</span>
+          </div>
+        </div>
+
+        <div class="interactive-col">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h4>Regional Power vs. Compute Throughput (2024 &rarr; 2026)</h4>
+              <span class="chart-tag">HYDROPOWER FIRM POWER</span>
+            </div>
+            
+            <!-- Reactive SVG Telemetry Chart -->
+            <div class="chart-wrapper">
+              <svg viewBox="0 0 500 240" class="reactive-chart" id="computeChart">
+                <line x1="40" y1="20" x2="40" y2="200" stroke="#333a46" stroke-width="1"/>
+                <line x1="40" y1="200" x2="480" y2="200" stroke="#333a46" stroke-width="1"/>
+                
+                <!-- Horizontal Gridlines -->
+                <line x1="40" y1="140" x2="480" y2="140" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 4"/>
+                <line x1="40" y1="80" x2="480" y2="80" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 4"/>
+
+                <!-- Hydro Line -->
+                <path d="M 50,170 Q 180,150 280,110 T 460,50" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+                <!-- Compute Line -->
+                <path d="M 50,190 Q 180,180 280,130 T 460,35" fill="none" stroke="#34d399" stroke-width="2.5" stroke-dasharray="6 4"/>
+
+                <!-- Interactive Data Hover Points -->
+                <circle cx="460" cy="50" r="5" fill="#38bdf8" class="chart-dot" onclick="inspectChartPoint('hydro')"/>
+                <circle cx="460" cy="35" r="5" fill="#34d399" class="chart-dot" onclick="inspectChartPoint('compute')"/>
+
+                <text x="50" y="218" class="axis-lbl">2024 Q1</text>
+                <text x="240" y="218" class="axis-lbl">2025 Q2</text>
+                <text x="430" y="218" class="axis-lbl">2026 Q3</text>
+              </svg>
+            </div>
+
+            <div class="chart-legend">
+              <div class="leg-item"><span class="leg-swatch hydro-swatch"></span> Hydro Firm Capacity (MW)</div>
+              <div class="leg-item"><span class="leg-swatch compute-swatch"></span> Edge Compute Density (PFLOPS)</div>
+            </div>
+            
+            <div class="chart-dossier" id="chartDossier">
+              Click any milestone point on the chart to inspect empirical load telemetry.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter 2: Interactive In-Context AI Agent (Aether Auditor) -->
+  <section class="story-chapter bg-glass" id="auditor">
+    <div class="editorial-container">
+      <div class="section-intro text-center">
+        <span class="section-kicker">AUTONOMOUS AUDITOR</span>
+        <h2>Interrogate the 2026 Regional Telemetry via Embedded AI Agent.</h2>
+        <p class="standfirst">
+          An in-context micro-agent initialized with this report's raw dataset. Query power consumption, latency indexes, or watershed correlation in natural language:
+        </p>
+      </div>
+
+      <div class="auditor-shell">
+        
+        <!-- Suggested Questions -->
+        <div class="query-pills">
+          <button class="pill" onclick="askAuditor('What is the carbon footprint of CDO edge models?')">Carbon Footprint?</button>
+          <button class="pill" onclick="askAuditor('How does Bukidnon hydro baseload sustain 18 PFLOPS?')">Hydro Baseload Capacity?</button>
+          <button class="pill" onclick="askAuditor('What are the latency benchmarks across Misamis Oriental?')">Regional Latency Benchmarks?</button>
+          <button class="pill" onclick="askAuditor('How are watershed early-warning sensors integrated?')">Watershed Sensor Telemetry?</button>
+        </div>
+
+        <!-- Dialogue Stage -->
+        <div class="dialogue-box" id="dialogueBox">
+          <div class="msg-row agent-row">
+            <span class="msg-avatar">AE</span>
+            <div class="msg-bubble">
+              Hello. I am the <strong>Aether 2026 In-Context Auditor</strong>. I have empirical access to the 2026 telemetry streams across Northern Mindanao’s compute clusters, Agus hydropower substations, and Macajalar Bay sensor arrays. How may I clarify this report?
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="input-bar">
+          <input type="text" id="userInput" placeholder="Ask a question regarding Northern Mindanao's 2026 AI infrastructure..." onkeydown="handleInputKey(event)">
+          <button class="send-btn" onclick="sendUserMessage()">Query Agent &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="annual-footer">
+    <div class="editorial-container footer-flex">
+      <div class="footer-meta">
+        <span class="f-brand">AETHER ANNUAL REPORT &bull; 2026 EDITION</span>
+        <p>Published in Cagayan de Oro, Northern Mindanao. Distributed open-access telemetry and creative engineering case study.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ninoredoble/aether-report-2026" target="_blank" class="repo-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Open Source Repository & Dataset
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
