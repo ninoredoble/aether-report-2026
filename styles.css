@@ -239,7 +239,7 @@ code { font-family: inherit; font-style: italic; }
   .chart { margin-top: 4px; }
   .legend { margin-top: 6px; gap: 4px 14px; font-size: var(--step-small); }
   .stage-caption { padding: 14px 16px; }
-  .step { min-height: 66svh; padding: 40px var(--margin) 64px; justify-content: flex-start; }
+  .step { min-height: 66svh; padding: 40px var(--margin) 64px; justify-content: flex-start; scroll-margin-top: max(330px, 50svh); }
   .step-cover { min-height: 0; padding-top: 24px; }
   .step-last { min-height: 90svh; }
   .masthead { margin-bottom: 32px; }
