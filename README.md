@@ -1,59 +1,40 @@
 # Aether Report 2026
 
-> The 2026 Northern Mindanao AI & Autonomous Systems Impact Report.  
-> An editorial scrollytelling publication and empirical case study examining edge artificial intelligence, distributed renewable compute topologies, and ecological telemetry networks across Region X.
+An interactive study, not a production system. One scroll-driven data story in the style of a printed annual report:
+a small server room beside a small run-of-river hydro plant, followed month by month through a year.
+A fixed chart on one side changes as you read the text on the other.
 
----
+**All data is illustrative.** The river, the plant and the server room are invented. The monthly river shape is made up to
+look like a river with a wet and a dry season; it is not taken from any gauge, plant or sensor. There are no live feeds,
+no backend and no database. The page is static HTML, CSS and JavaScript, and the arithmetic runs in the browser.
 
-## Overview & Executive Thesis
+## What the story shows
 
-In 2026, artificial intelligence in the Philippine archipelago transitioned from centralized overseas cloud dependencies to resilient regional edge meshes. 
+- A 220 kW plant whose output follows the river (84 kW in April, 220 kW in August).
+- A server room drawing a flat 150 kW: 110 kW fixed load plus 40 kW of batch work.
+- The river falls short from February to May and covers 91.1% of the year's electricity.
+- If batch work is rescheduled towards the wet months (same yearly total), coverage rises to 97.9%.
+  March and April still fall short; the study does not size a battery, grid tie or second source.
 
-**Aether Report 2026** documents Northern Mindanao's emergence as an autonomous compute territory -- coupling clean **Agus-Pulangi run-of-river hydropower** directly to low-latency edge inference clusters across Tagoloan, Cagayan de Oro, Mount Kitanglad, Macajalar Bay, and Iligan City.
+The month-by-month table is on the page, and a button downloads the same values as CSV (every row marked `illustrative`).
 
----
-
-## Key Macro Indicators
-
-- **18.4 PFLOPS Clean Compute Capacity:** Aggregate regional edge compute powered with 100% zero-carbon energy attribution directly from Mindanao's run-of-river hydropower cascades.
-- **4.2ms Median Edge Latency (p99 < 8.1ms):** Real-time responsiveness across 14 municipal telemetry networks.
-- **128,000 Active Mesh Telemetry Nodes:** Continuous environmental monitoring spanning soil moisture, marine salinity, watershed river levels, and sub-transmission grid load flows.
-- **91.4% Carbon Intensity Reduction:** Over 42,800 MT CO2e avoided annually relative to fossil-backed hyperscale cloud training facilities.
-- **1.06 Average Data Center PUE:** Natural convective water-cooling loops eliminating mechanical refrigerants.
-
----
-
-## Interactive Engineering Features
-
-1. **Ambient Fluid Shader Canvas:** Real-time canvas gradient and particle velocity simulation evoking Northern Mindanao's river cascades and mist canopies.
-2. **Multi-Quarter Compute & Hydropower Dynamic Time Series:** Interactive quarterly milestone selector (2024 Q1 through 2026 Q3) displaying firm hydropower baseload against edge compute scaling and carbon offsets.
-3. **Five Regional Autonomous Edge Clusters:** Interactive inspection cards for Northern Mindanao's dedicated edge server nodes (Tagoloan Industrial Edge, Cagayan Basin Telemetry Hub, Mount Kitanglad High Node, Macajalar Bay Marine Array, Iligan Hydro-Compute Campus).
-4. **In-Context AI Auditor Micro-Agent:** Embedded telemetry auditor with natural language query parsing across all seven regional portfolio engineering systems.
-5. **Cryptographic Telemetry Audit Exporter:** Client-side JSON download of regional performance metrics, telemetry indicators, and SHA-256 verification hash.
-
----
-
-## Design & Editorial Standards
-
-- **Aesthetic:** Stripe Press / Apple Keynote annual editorial design.
-- **Typography:** Expressive editorial serif (`Instrument Serif`) paired with crisp geometric grotesques (`Plus Jakarta Sans`) and engineering matrices (`JetBrains Mono`).
-- **Color Palette:** Deep obsidian (`#07090d`), slate titanium (`#10151f`), ethereal teal (`#38bdf8`), and botanical mint (`#34d399`).
-- **Character Encoding:** Strict 100% 7-bit ASCII throughout all repository files.
-
----
-
-## Repository Structure
+## Files
 
 ```
-.
-|-- index.html     # Editorial scrollytelling document with interactive components
-|-- styles.css     # Clean CSS variables, typography, and responsive layouts
-|-- app.js         # Fluid shader, time-series engine, node inspector, and auditor agent
-+-- README.md      # Technical specification and macro findings
+index.html   page and copy
+styles.css   print-report layout, sticky stage, phone layout, reduced-motion rules
+app.js       the model, the chart, and the scroll logic
+assets/      three to four credited photographs from Wikimedia Commons (resized)
 ```
 
----
+Works at phone width with no horizontal scroll. With `prefers-reduced-motion` the chart changes state without animating.
 
-## License & Attribution
+## Pictures
 
-Published in Cagayan de Oro, Northern Mindanao. Distributed open-access telemetry and creative engineering case study under the MIT License.
+Photographs from Wikimedia Commons, resized: "Pulangi river in valencia" by arcibald (CC BY 2.0);
+"Cagayan De Oro River, Borja Bridge Carmen", "Agus River, Iligan" by Patrickroque01 (CC BY-SA 4.0);
+"Pulangi River, Maramag, Bukidnon, Philippines 002" by Obsidian Soul (CC BY-SA 4.0). They show real rivers; the study does not use any measurement of them.
+
+## Licence
+
+Code under the MIT licence, see `LICENSE`. Photographs keep their own licences above.
