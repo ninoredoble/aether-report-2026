@@ -24,7 +24,7 @@ The month-by-month table is on the page, and a button downloads the same values 
 index.html   page and copy
 styles.css   print-report layout, sticky stage, phone layout, reduced-motion rules
 app.js       the model, the chart, and the scroll logic
-assets/      three to four credited photographs from Wikimedia Commons (resized)
+assets/      four credited photographs from Wikimedia Commons (resized)
 ```
 
 Works at phone width with no horizontal scroll. With `prefers-reduced-motion` the chart changes state without animating.

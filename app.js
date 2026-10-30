@@ -1,5 +1,5 @@
 /* Aether Report 2026: an interactive study.
-   Everything below is illustrative. The monthly river shape is invented; nothing is measured, fetched or stored. */
+   Everything below is illustrative. The monthly river shape is invented; no data is measured, fetched or stored. */
 
 (function () {
   'use strict';
