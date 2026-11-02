@@ -1,315 +1,255 @@
-/**
- * Aether Report 2026 - Regional AI & Autonomous Systems Telemetry Engine
- * 100% 7-Bit ASCII Character Encoding - Zero Mojibake
- * Integrated Architecture: Agus-Pulangi Hydro Baseload, Edge Inference, Ecological Meshes
- */
+/* Aether Report 2026: an interactive study.
+   Everything below is illustrative. The monthly river shape is invented; no data is measured, fetched or stored. */
 
-// 1. Ambient Fluid Canvas Animation
-document.addEventListener("DOMContentLoaded", () => {
-  initFluidShader();
-  initQuarterSelector();
-  initClusterNodes();
-  initAuditorAgent();
-  initExportAction();
-});
+(function () {
+  'use strict';
 
-function initFluidShader() {
-  const canvas = document.getElementById("fluidCanvas");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
+  /* ---------- The model ---------- */
 
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var RATING = 220;                                  // kW the plant makes at full flow
+  var SHAPE = [0.78, 0.62, 0.45, 0.38, 0.55, 0.82, 0.95, 1.0, 0.96, 0.88, 0.80, 0.82];
+  var FIXED = 110;                                   // kW that must stay up
+  var BATCH = 40;                                    // kW of work that could run on any day
+  var BATCH_CAP = 80;                                // most batch work the room can run in one month
+  var HOURS = 730;                                   // hours in a month
 
-  window.addEventListener("resize", () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+  var river = SHAPE.map(function (s) { return s * RATING; });
+  var spare = river.map(function (r) { return Math.min(BATCH_CAP, Math.max(0, r - FIXED)); });
+  var scale = BATCH * 12 / sum(spare);
+  var batchShifted = spare.map(function (s) { return s * scale; });
+  var batchFlat = MONTHS.map(function () { return BATCH; });
 
-  let t = 0;
-  function render() {
-    t += 0.0025;
-    ctx.clearRect(0, 0, width, height);
-
-    // Dynamic Ethereal Orbs
-    const x1 = width * 0.3 + Math.sin(t) * 120;
-    const y1 = height * 0.35 + Math.cos(t * 0.8) * 90;
-    const grad1 = ctx.createRadialGradient(x1, y1, 30, x1, y1, width * 0.45);
-    grad1.addColorStop(0, "rgba(56, 189, 248, 0.16)");
-    grad1.addColorStop(1, "transparent");
-
-    const x2 = width * 0.72 + Math.cos(t * 0.7) * 140;
-    const y2 = height * 0.65 + Math.sin(t * 1.1) * 100;
-    const grad2 = ctx.createRadialGradient(x2, y2, 40, x2, y2, width * 0.45);
-    grad2.addColorStop(0, "rgba(52, 211, 153, 0.12)");
-    grad2.addColorStop(1, "transparent");
-
-    ctx.fillStyle = grad1;
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.fillStyle = grad2;
-    ctx.fillRect(0, 0, width, height);
-
-    requestAnimationFrame(render);
+  function sum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+  function uncovered(batch) {
+    return river.map(function (r, i) { return Math.max(0, FIXED + batch[i] - r); });
   }
-  render();
-}
 
-// 2. Multi-Quarter Time-Series Telemetry Engine
-const QUARTER_DATA = [
-  {
-    id: "2024-q1",
-    label: "2024 Q1",
-    hydroMw: 280,
-    computePflops: 2.8,
-    nodes: "24,000",
-    latency: "9.4 ms",
-    pue: "1.14",
-    offsetMt: "6,200 MT CO2e"
-  },
-  {
-    id: "2024-q3",
-    label: "2024 Q3",
-    hydroMw: 310,
-    computePflops: 4.5,
-    nodes: "42,000",
-    latency: "7.8 ms",
-    pue: "1.12",
-    offsetMt: "11,400 MT CO2e"
-  },
-  {
-    id: "2025-q1",
-    label: "2025 Q1",
-    hydroMw: 340,
-    computePflops: 7.2,
-    nodes: "68,000",
-    latency: "6.2 ms",
-    pue: "1.09",
-    offsetMt: "19,500 MT CO2e"
-  },
-  {
-    id: "2025-q3",
-    label: "2025 Q3",
-    hydroMw: 375,
-    computePflops: 11.6,
-    nodes: "95,000",
-    latency: "5.1 ms",
-    pue: "1.08",
-    offsetMt: "28,100 MT CO2e"
-  },
-  {
-    id: "2026-q1",
-    label: "2026 Q1",
-    hydroMw: 395,
-    computePflops: 15.2,
-    nodes: "114,000",
-    latency: "4.6 ms",
-    pue: "1.07",
-    offsetMt: "36,400 MT CO2e"
-  },
-  {
-    id: "2026-q3",
-    label: "2026 Q3",
-    hydroMw: 412,
-    computePflops: 18.4,
-    nodes: "128,000",
-    latency: "4.2 ms",
-    pue: "1.06",
-    offsetMt: "42,800 MT CO2e"
+  var uncoveredFlat = uncovered(batchFlat);
+  var uncoveredShifted = uncovered(batchShifted);
+
+  /* ---------- Story steps: what the chart shows at each one ---------- */
+
+  var STATES = [
+    null,
+    { hydro: 1, demand: 0, gap: 0, shift: 0, focus: 0, value: '84 kW', label: 'River output in April, the lowest month' },
+    { hydro: 1, demand: 1, gap: 0, shift: 0, focus: 0, value: '150 kW', label: 'Server room load, every month' },
+    { hydro: 1, demand: 1, gap: 1, shift: 0, focus: 0, value: '116.8 MWh', label: 'Not covered by the river. It covers 91.1% of the year.' },
+    { hydro: 1, demand: 1, gap: 1, shift: 1, focus: 0, value: '27.3 MWh', label: 'Not covered once batch follows the river. It covers 97.9%.' },
+    { hydro: 1, demand: 1, gap: 1, shift: 1, focus: 1, value: '11 and 26 kW', label: 'Still not covered, in March and April' }
+  ];
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var stage = document.getElementById('stage');
+  var svg = document.getElementById('chart');
+  var legend = document.getElementById('legend');
+  var readout = document.querySelector('.readout');
+  var readoutValue = document.getElementById('readoutValue');
+  var readoutLabel = document.getElementById('readoutLabel');
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs, parent) {
+    var node = document.createElementNS(NS, name);
+    for (var k in attrs) node.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(node);
+    return node;
   }
-];
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
 
-function selectQuarter(index) {
-  const d = QUARTER_DATA[index];
-  if (!d) return;
+  /* ---------- Chart ---------- */
 
-  // Update button active state
-  document.querySelectorAll(".q-btn").forEach((btn, i) => {
-    if (i === index) btn.classList.add("active");
-    else btn.classList.remove("active");
-  });
+  var cur = { hydro: 0, demand: 0, gap: 0, shift: 0, focus: 0 };
+  var target = { hydro: 0, demand: 0, gap: 0, shift: 0, focus: 0 };
+  var geo = null;
+  var bars = [];
+  var YMAX = 230;
 
-  // Update SVG dots
-  document.querySelectorAll(".chart-dot").forEach(dot => {
-    const dotIdx = parseInt(dot.getAttribute("data-idx"), 10);
-    if (dotIdx === index) {
-      dot.classList.add("selected");
-      dot.setAttribute("r", "6.5");
+  function build() {
+    var box = svg.getBoundingClientRect();
+    var w = Math.round(box.width);
+    var h = Math.round(box.height);
+    if (w < 40 || h < 40) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+
+    var narrow = w < 520;
+    var left = narrow ? 34 : 44, right = 4, top = 8, bottom = 26;
+    var pw = w - left - right, ph = h - top - bottom;
+    var gw = pw / 12;
+    var bw = Math.max(5, Math.min(24, gw * 0.4));
+    geo = { w: w, h: h, left: left, top: top, ph: ph, gw: gw, bw: bw };
+
+    var y = function (v) { return top + ph - v / YMAX * ph; };
+
+    [0, 50, 100, 150, 200].forEach(function (t) {
+      el('line', { x1: left, x2: left + pw, y1: y(t), y2: y(t), 'class': 'tick' }, svg);
+      var lab = el('text', { x: left - 8, y: y(t) + 5, 'text-anchor': 'end' }, svg);
+      lab.textContent = t;
+    });
+
+    var rate = el('g', { 'class': 'rating-g' }, svg);
+    el('line', { x1: left, x2: left + pw, y1: y(RATING), y2: y(RATING), 'class': 'rating' }, rate);
+    var rl = el('text', { x: left + 6, y: y(RATING) - 6, 'class': 'rating-label' }, rate);
+    rl.textContent = 'Plant rating, ' + RATING + ' kW';
+    geo.rating = rate;
+
+    bars = MONTHS.map(function (m, i) {
+      var cx = left + gw * (i + 0.5);
+      var g = el('g', {}, svg);
+      var b = {
+        g: g,
+        river: el('rect', { 'class': 'river', x: cx - bw - 1, width: bw }, g),
+        fixed: el('rect', { 'class': 'fixed', x: cx + 1, width: bw }, g),
+        fixedGap: el('rect', { 'class': 'gap', x: cx + 1, width: bw }, g),
+        batch: el('rect', { 'class': 'batch', x: cx + 1, width: bw }, g),
+        batchGap: el('rect', { 'class': 'gap', x: cx + 1, width: bw }, g)
+      };
+      var t = el('text', { x: cx, y: h - 6, 'text-anchor': 'middle' }, svg);
+      t.textContent = narrow ? m.charAt(0) : m;
+      return b;
+    });
+    draw();
+  }
+
+  function setRect(node, lo, hi, visible) {
+    // lo and hi are screen y positions of the segment's bottom and top
+    var hgt = Math.max(0, lo - hi);
+    node.setAttribute('y', hi);
+    node.setAttribute('height', hgt);
+    node.style.display = visible && hgt > 0.2 ? '' : 'none';
+  }
+
+  function draw() {
+    if (!geo) return;
+    var base = geo.top + geo.ph;
+    var perUnit = geo.ph / YMAX;
+    geo.rating.style.opacity = clamp(cur.hydro * 1.5, 0, 1);
+
+    for (var i = 0; i < 12; i++) {
+      var b = bars[i];
+      var hp = clamp((cur.hydro * 15 - i) / 3, 0, 1);
+      var dp = clamp((cur.demand * 15 - i) / 3, 0, 1);
+      var batch = batchFlat[i] + (batchShifted[i] - batchFlat[i]) * cur.shift;
+      var focusDim = cur.focus * (i === 2 || i === 3 ? 0 : 0.72);
+      b.g.style.opacity = 1 - focusDim;
+
+      setRect(b.river, base, base - river[i] * hp * perUnit, true);
+
+      // The room's column, built from the data baseline upward and scaled in by dp.
+      var fixedTop = FIXED, batchTop = FIXED + batch;
+      var h = river[i];                               // river output decides what is covered
+      var px = function (v) { return base - v * dp * perUnit; };
+
+      setRect(b.fixed, px(0), px(fixedTop), true);
+      setRect(b.batch, px(fixedTop), px(batchTop), true);
+
+      // Uncovered parts are painted over the normal colours; their opacity is the story's third step.
+      setRect(b.fixedGap, px(Math.min(h, fixedTop)), px(fixedTop), h < fixedTop);
+      setRect(b.batchGap, px(Math.max(fixedTop, h)), px(batchTop), batchTop > h);
+      b.fixedGap.style.opacity = cur.gap;
+      b.batchGap.style.opacity = cur.gap;
+    }
+  }
+
+  /* ---------- Tweening ---------- */
+
+  var raf = 0, from = null, t0 = 0, DUR = 1000;
+  function ease(p) { return 1 - Math.pow(1 - p, 3); }
+
+  function go(next) {
+    for (var k in cur) target[k] = next[k];
+    cancelAnimationFrame(raf);
+    if (reduce.matches) {
+      for (var j in cur) cur[j] = target[j];
+      draw();
+      return;
+    }
+    from = {};
+    for (var f in cur) from[f] = cur[f];
+    t0 = performance.now();
+    raf = requestAnimationFrame(tick);
+  }
+
+  function tick(now) {
+    var p = clamp((now - t0) / DUR, 0, 1), e = ease(p);
+    for (var k in cur) cur[k] = from[k] + (target[k] - from[k]) * e;
+    draw();
+    if (p < 1) raf = requestAnimationFrame(tick);
+  }
+
+  /* ---------- Which step is being read ---------- */
+
+  var active = -1;
+
+  function setStep(n) {
+    if (n === active) return;
+    active = n;
+    steps.forEach(function (s, i) { if (i <= n) s.classList.add('in'); });
+    var st = STATES[n];
+    if (!st) {
+      stage.dataset.mode = 'photo';
+      go({ hydro: 0, demand: 0, gap: 0, shift: 0, focus: 0 });
+      return;
+    }
+    stage.dataset.mode = 'chart';
+    go(st);
+    readoutValue.textContent = st.value;
+    readoutLabel.textContent = st.label;
+    readout.classList.remove('swap');
+    void readout.offsetWidth;
+    readout.classList.add('swap');
+    Array.prototype.forEach.call(legend.children, function (li) {
+      li.classList.toggle('on', n >= Number(li.dataset.from));
+    });
+  }
+
+  var ticking = false;
+  function locate() {
+    ticking = false;
+    var vh = window.innerHeight;
+    var line;
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      line = stage.getBoundingClientRect().bottom + 70;
     } else {
-      dot.classList.remove("selected");
-      dot.setAttribute("r", "4.5");
+      line = vh * 0.5;
     }
-  });
-
-  // Update Dossier Readout
-  document.getElementById("dossierQuarter").textContent = d.label + " BENCHMARK:";
-  document.getElementById("dossierDetails").textContent = 
-    "Firm Load: " + d.hydroMw + " MW // Compute: " + d.computePflops + " PFLOPS // PUE: " + d.pue + " // Offset: " + d.offsetMt;
-}
-
-function initQuarterSelector() {
-  document.querySelectorAll(".q-btn").forEach((btn, i) => {
-    btn.addEventListener("click", () => selectQuarter(i));
-  });
-
-  document.querySelectorAll(".chart-dot").forEach(dot => {
-    dot.addEventListener("click", function() {
-      const idx = parseInt(this.getAttribute("data-idx"), 10);
-      selectQuarter(idx);
-    });
-  });
-}
-
-// 3. Regional Node Cluster Dossier
-const NODE_INFO = {
-  tagoloan: {
-    title: "TAGOLOAN INDUSTRIAL EDGE CLUSTER",
-    desc: "Colocated at the PHIVIDEC industrial sub-transmission substation. Houses 128 modular edge compute server cabinets cooled with ambient river heat exchangers. Directly drives predictive load balancing for heavy industrial fabrication and aluminum smelting operations."
-  },
-  cdo: {
-    title: "CAGAYAN RIVER BASIN TELEMETRY HUB",
-    desc: "Positioned in Carmen Valley directly adjacent to the Macasandig hydrologic gauge array. Processes 6 upstream tributary gauge signals via localized neural differential solvers, providing downstream urban barangays with a 45-minute advance flood warning window."
-  },
-  kitanglad: {
-    title: "MOUNT KITANGLAD HIGH-ALTITUDE NODE",
-    desc: "Operating at 1,800m elevation above the cloud base. Acts as an agro-satellite ground relay for Bukidnon coffee, pineapple, and cacao smallholder farming cooperatives running offline-first FAO-56 Penman-Monteith crop evapotranspiration models."
-  },
-  macajalar: {
-    title: "MACAJALAR BAY MARINE ACOUSTIC ARRAY",
-    desc: "Directly linked to subsea bathymetric hydrophones and multi-spectral benthic imagery cameras spanning Initao and Jasaan sanctuaries. Solves hydrodynamic larval drift vectors and monitors NOAA Degree Heating Weeks (DHW) thermal bleaching anomalies."
-  },
-  iligan: {
-    title: "ILIGAN HYDRO-COMPUTE CAMPUS",
-    desc: "Situated inside the Agus IV hydroelectric facility perimeter with dedicated high-voltage busbar coupling. Serves as Northern Mindanao's primary zero-carbon model training and synthetic simulation cluster operating with 99.8% firm renewable uptime."
-  }
-};
-
-function initClusterNodes() {
-  document.querySelectorAll(".cluster-card").forEach(card => {
-    card.addEventListener("click", function() {
-      document.querySelectorAll(".cluster-card").forEach(c => c.classList.remove("active"));
-      this.classList.add("active");
-
-      const nodeKey = this.getAttribute("data-node");
-      const info = NODE_INFO[nodeKey];
-      if (info) {
-        document.getElementById("dossierNodeTitle").textContent = info.title;
-        document.getElementById("dossierNodeDesc").textContent = info.desc;
-      }
-    });
-  });
-}
-
-// 4. In-Context Auditor AI Agent Knowledge Base
-const KNOWLEDGE_BASE = {
-  "carbon": "The 2026 Northern Mindanao compute topology achieves a 91.4% carbon reduction relative to fossil-fueled hyperscale cloud centers by colocating GPU/TPU nodes directly with Agus IV and Pulangi IV run-of-river hydropower cascades. Avoided regional emissions exceed 42,800 MT CO2e annually.",
-  "basin": "The Cagayan Basin Corridor integrates 6 acoustic-radar telemetry stations (Talakag, Kabula, Bubunawan, Macasandig, Carmen, Puntod). A dynamic Saint-Venant hydraulic routing engine models storm hydrographs against the 3,600 m3/s levee limit, delivering a 45-minute civic evacuation buffer.",
-  "marine": "The Archipelago Marine Cadence engine tracks NOAA Degree Heating Weeks (DHW) and bathymetric transects from 0m down to 4,200m depth across 8 Mindanao sanctuaries. It models pelagic larval drift trajectories at 1.1 to 2.4 knots to coordinate cross-boundary marine protection.",
-  "scada": "The Mindanao Grid Mesh simulator models a 138kV/69kV sub-transmission network governed by the generator swing equation J*(df/dt) = P_gen - P_load - D*(f - f0). It features automated Under-Frequency Load Shedding (UFLS Stage 1 at 59.50 Hz, Stage 2 at 59.20 Hz) to eliminate cascading blackouts.",
-  "android": "ClimaPocket Android operates on Google Pixel 9 Pro with Android 15 and Material You 3.5. It evaluates real-time FAO-56 Penman-Monteith reference evapotranspiration (ET0), pesticide drift risk windows, and provides an offline-first Room SQLite cache for mountain farming cooperatives.",
-  "hablon": "The Hablon Textile Archive digitizes T'boli T'nalak (D4 dihedral group), Yakan Seputangan (P4m wallpaper group), Inaul Maguindanao (Pm wave), and Maranao Okir (C2 scroll). An interactive backstrap loom simulator reconstructs indigenous weaving pickups in vector mathematical drafts.",
-  "relay": "Relay Core API provides an ultra-low latency webhook dispatch gateway in Go and Redis. It enforces strict idempotency locking with SHA-256 event keys to prevent duplicate transactions, coupled with decorrelated jitter exponential retry backoff and hex-dump inspection."
-};
-
-function askAuditor(question) {
-  document.getElementById("userInput").value = question;
-  sendUserMessage();
-}
-
-function handleInputKey(e) {
-  if (e.key === "Enter") {
-    sendUserMessage();
-  }
-}
-
-function sendUserMessage() {
-  const inputEl = document.getElementById("userInput");
-  const query = inputEl.value.trim();
-  if (!query) return;
-
-  appendMessage("USR", query, true);
-  inputEl.value = "";
-
-  // Simulate in-context reasoning
-  setTimeout(() => {
-    const q = query.toLowerCase();
-    let response = "Based on Northern Mindanao's 2026 telemetry streams, all 5 regional edge clusters operate within grid stability margins with 100% run-of-river hydro attribution, median 4.2ms latency, and continuous civic telemetry integration.";
-
-    if (q.includes("carbon") || q.includes("hydro") || q.includes("baseload") || q.includes("offset") || q.includes("pue")) {
-      response = KNOWLEDGE_BASE["carbon"];
-    } else if (q.includes("cagayan") || q.includes("basin") || q.includes("flood") || q.includes("watershed") || q.includes("river")) {
-      response = KNOWLEDGE_BASE["basin"];
-    } else if (q.includes("marine") || q.includes("cadence") || q.includes("bleach") || q.includes("dhw") || q.includes("ocean") || q.includes("bay")) {
-      response = KNOWLEDGE_BASE["marine"];
-    } else if (q.includes("scada") || q.includes("grid") || q.includes("frequency") || q.includes("blackout") || q.includes("ufls") || q.includes("power")) {
-      response = KNOWLEDGE_BASE["scada"];
-    } else if (q.includes("android") || q.includes("clima") || q.includes("agro") || q.includes("fao") || q.includes("evapo") || q.includes("spray") || q.includes("pixel")) {
-      response = KNOWLEDGE_BASE["android"];
-    } else if (q.includes("hablon") || q.includes("textile") || q.includes("weave") || q.includes("symmetry") || q.includes("t'boli") || q.includes("inaul")) {
-      response = KNOWLEDGE_BASE["hablon"];
-    } else if (q.includes("relay") || q.includes("webhook") || q.includes("idempotency") || q.includes("redis") || q.includes("api")) {
-      response = KNOWLEDGE_BASE["relay"];
+    var found = 0;
+    for (var i = 0; i < steps.length; i++) {
+      if (steps[i].getBoundingClientRect().top <= line) found = i;
     }
+    // Past the story the plate is released; keep the last step.
+    setStep(found);
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(locate); }
+  }
 
-    appendMessage("AE", response, false);
-  }, 350);
-}
+  /* ---------- CSV of the illustrative model ---------- */
 
-function appendMessage(avatar, text, isUser) {
-  const box = document.getElementById("dialogueBox");
-  const row = document.createElement("div");
-  row.className = "msg-row " + (isUser ? "user-row" : "agent-row");
-  row.innerHTML = 
-    '<span class="msg-avatar">' + avatar + '</span>' +
-    '<div class="msg-bubble">' + text + '</div>';
-  box.appendChild(row);
-  box.scrollTop = box.scrollHeight;
-}
+  var csvButton = document.getElementById('csvButton');
+  if (csvButton) {
+    csvButton.addEventListener('click', function () {
+      var rows = ['month,river_output_kw,fixed_load_kw,batch_flat_kw,batch_river_schedule_kw,uncovered_flat_kw,uncovered_river_schedule_kw,data_status'];
+      MONTHS.forEach(function (m, i) {
+        rows.push([m, river[i].toFixed(1), FIXED, BATCH, batchShifted[i].toFixed(1), uncoveredFlat[i].toFixed(1), uncoveredShifted[i].toFixed(1), 'illustrative'].join(','));
+      });
+      var blob = new Blob([rows.join('\n') + '\n'], { type: 'text/csv' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'aether-report-2026-illustrative-model.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    });
+  }
 
-function initAuditorAgent() {
-  window.askAuditor = askAuditor;
-  window.sendUserMessage = sendUserMessage;
-  window.handleInputKey = handleInputKey;
-}
+  /* ---------- Start ---------- */
 
-// 5. Regional Audit JSON Exporter
-function initExportAction() {
-  const btn = document.getElementById("btnExportAudit");
-  if (!btn) return;
-
-  btn.addEventListener("click", () => {
-    const report = {
-      report_title: "Aether Report 2026: Northern Mindanao Regional Telemetry Audit",
-      publication_volume: "Vol. III (2026 Annual Edition)",
-      jurisdiction: "Region X, Northern Mindanao, Philippines",
-      generated_at: new Date().toISOString(),
-      cryptographic_digest: "sha256:7b8f9a2c1e4d893450912abcf01234876abcdef0123456789abcdef012345678",
-      macro_indicators: {
-        aggregate_clean_compute_pflops: 18.4,
-        median_edge_inference_latency_ms: 4.2,
-        active_telemetry_mesh_nodes: 128000,
-        annual_carbon_offset_metric_tons: 42800,
-        average_data_center_pue: 1.06,
-        primary_power_source: "100% Agus-Pulangi Run-of-River Hydroelectric Cascade"
-      },
-      quarterly_time_series: QUARTER_DATA,
-      regional_edge_nodes: NODE_INFO,
-      engineering_subsystems_audited: [
-        "cagayan-basin-corridor (Hydrologic & Flood Early-Warning Modeling)",
-        "archipelago-marine-cadence (NOAA DHW Bleaching & Seafloor Bathymetry)",
-        "mindanao-grid-mesh (138kV SCADA Mimic Board & Swing Equation Physics)",
-        "hablon-textile-archive (Algorithmic Symmetry Digitization & Digital Loom)",
-        "relay-core-api (Idempotent Webhook Dispatch Gateway & CLI Terminal)",
-        "clima-pocket-android (Google Pixel 9 Pro Material You Agrometeorology)"
-      ]
-    };
-
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(report, null, 2));
-    const dl = document.createElement("a");
-    dl.setAttribute("href", dataStr);
-    dl.setAttribute("download", "aether_2026_regional_telemetry_audit.json");
-    document.body.appendChild(dl);
-    dl.click();
-    dl.remove();
-  });
-}
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { build(); onScroll(); });
+  if (window.ResizeObserver) new ResizeObserver(function () { build(); }).observe(svg);
+  build();
+  locate();
+})();

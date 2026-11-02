@@ -3,363 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AETHER 2026 // Northern Mindanao AI &amp; Autonomous Systems Annual Report</title>
-  <meta name="description" content="The 2026 Annual Report on Artificial Intelligence, distributed computing, and autonomous ecological systems across Northern Mindanao.">
+  <title>Aether Report 2026: one river, one server room, a year</title>
+  <meta name="description" content="An interactive scroll study with illustrative data: how much of a small server room's electricity a small run-of-river plant could cover across a year, and what rescheduling batch work changes.">
+  <meta name="theme-color" content="#161c1a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23161c1a'/%3E%3Crect x='6' y='14' width='5' height='12' fill='%2362b79b'/%3E%3Crect x='13.5' y='8' width='5' height='18' fill='%2362b79b'/%3E%3Crect x='21' y='17' width='5' height='9' fill='%23e48e66'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+  <a class="skip" href="#story">Skip to the story</a>
 
-  <!-- Ambient Fluid Shader Canvas -->
-  <canvas id="fluidCanvas" class="fluid-canvas" aria-hidden="true"></canvas>
+  <main>
+    <div class="split" id="story">
 
-  <!-- Masthead -->
-  <header class="annual-masthead">
-    <div class="masthead-inner">
-      <div class="brand">
-        <span class="brand-tag">VOL. III &bull; 2026 ANNUAL EDITION</span>
-        <span class="brand-title">AETHER REPORT &bull; NORTHERN MINDANAO</span>
+      <!-- The half that stays put: a photograph first, then the chart the story is told with -->
+      <aside class="stage" id="stage" data-mode="photo" aria-label="Chart for the story, drawn from the illustrative model">
+        <img class="stage-photo" src="assets/pulangi-valencia.jpg" width="1600" height="1061"
+             alt="The Pulangi River winding through a wide green plain in Bukidnon, with a mountain range and cloud behind it.">
+        <p class="stage-caption">The Pulangi River on the Maapag Plain, Bukidnon. A real river of the region; the numbers in this study are not taken from it.</p>
+
+        <div class="stage-chart" id="chartPanel">
+          <p class="stage-note">Illustrative data. Not measured at any site.</p>
+          <p class="readout" aria-hidden="true"><span class="readout-value" id="readoutValue"></span><span class="readout-label" id="readoutLabel"></span></p>
+          <svg class="chart" id="chart" role="img" aria-label="Column chart by month for a year. Each month has a river output column and a server room load column. Full values are in the table below the story."></svg>
+          <ul class="legend" id="legend">
+            <li data-from="1"><i class="sw sw-river"></i>River output</li>
+            <li data-from="2"><i class="sw sw-fixed"></i>Fixed load</li>
+            <li data-from="2"><i class="sw sw-batch"></i>Batch work</li>
+            <li data-from="3"><i class="sw sw-gap"></i>Not covered by the river</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- The half that scrolls -->
+      <div class="column">
+
+        <section class="step step-cover" data-step="0" id="top">
+          <header class="masthead">
+            <a class="wordmark" href="#top">Aether Report 2026</a>
+            <nav aria-label="Sections">
+              <a href="#river">Story</a>
+              <a href="#figures">Figures</a>
+              <a href="#method">Method</a>
+              <a href="https://github.com/ninoredoble/aether-report-2026">Source</a>
+            </nav>
+          </header>
+          <h1>One river, one server room, a year.</h1>
+          <p class="lead">A small server room runs on a small river. In the dry months the river falls short. This study follows that year, month by month, and asks how much of the shortfall a change of schedule can remove.</p>
+          <p class="plain">This is an interactive study that runs in your browser. The river, the plant and the server room are invented, and every number comes from a short model written for this page. It is a way to think about the problem, not a measurement of any site in Northern Mindanao.</p>
+          <p><a class="button" href="#river">Start with the river</a></p>
+        </section>
+
+        <section class="step" data-step="1" id="river" aria-labelledby="h-river">
+          <h2 id="h-river">The river rises and falls.</h2>
+          <p>Picture a small run-of-river plant on a river in Northern Mindanao. At full flow it makes 220 kW. Run-of-river means there is no large reservoir: the plant can only use what the river carries that month.</p>
+          <p>From June to October the river is full and the plant runs close to its rating. In March and April it makes less than half.</p>
+          <dl class="figures">
+            <div><dt>220 kW</dt><dd>Output at full flow, reached in August.</dd></div>
+            <div><dt>84 kW</dt><dd>Output in April, the lowest month.</dd></div>
+            <div><dt>165 kW</dt><dd>Average over the year.</dd></div>
+          </dl>
+        </section>
+
+        <section class="step" data-step="2" id="room" aria-labelledby="h-room">
+          <h2 id="h-room">The room never sleeps.</h2>
+          <p>Beside the plant sits a server room that draws 150 kW every month of the year.</p>
+          <p>110 kW of that is fixed load: the services that have to stay up. The other 40 kW is batch work, such as nightly backups, video transcoding and model retraining. It runs at a steady pace because nobody has asked it to do anything else.</p>
+        </section>
+
+        <section class="step" data-step="3" id="gap" aria-labelledby="h-gap">
+          <h2 id="h-gap">Four months fall short.</h2>
+          <p>Put the two side by side and the problem shows. From February to May the river makes less than the room draws. March and April are worst: 99 and 84 kW of river against 150 kW of load.</p>
+          <dl class="figures">
+            <div><dt>91.1%</dt><dd>Share of the year&rsquo;s electricity the river covers.</dd></div>
+            <div><dt>116.8 MWh</dt><dd>What would have to come from somewhere else.</dd></div>
+          </dl>
+        </section>
+
+        <section class="step" data-step="4" id="shift" aria-labelledby="h-shift">
+          <h2 id="h-shift">Let the batch follow the river.</h2>
+          <p>Batch work does not care which day it runs. Suppose the schedule follows the water: more batch in the wet months, almost none in the dry ones, the same total work over the year. The fixed load does not move. Nothing is bought; only the calendar changes.</p>
+          <dl class="figures">
+            <div><dt>97.9%</dt><dd>Share of the year&rsquo;s electricity the river now covers.</dd></div>
+            <div><dt>27.3 MWh</dt><dd>Left over, about a quarter of what it was.</dd></div>
+          </dl>
+        </section>
+
+        <section class="step step-last" data-step="5" id="left" aria-labelledby="h-left">
+          <h2 id="h-left">What a calendar cannot fix.</h2>
+          <p>Scheduling cannot move the fixed load. March and April still fall short, by 11 kW and 26 kW. This is where a battery, a grid connection or a second source would have to earn its cost.</p>
+          <p>This study does not try to size any of them. That question belongs to engineers who can measure the river.</p>
+        </section>
+
       </div>
-      <nav class="masthead-nav">
-        <a href="#prologue">Prologue</a>
-        <a href="#compute">Compute Topology</a>
-        <a href="#clusters">Regional Clusters</a>
-        <a href="#auditor">In-Context AI Agent</a>
+    </div>
+
+    <section class="figures-section" id="figures" aria-labelledby="h-figures">
+      <div class="figures-inner">
+        <div class="figures-head">
+          <h2 id="h-figures">The figures, month by month.</h2>
+          <p>Every number in the chart, in the order the story used it. The fixed load is 110 kW and the flat batch load is 40 kW in every month. All values are illustrative.</p>
+          <p><button class="button button-light" type="button" id="csvButton">Download as CSV</button></p>
+          <figure class="plate">
+            <img src="assets/agus-iligan.jpg" width="1400" height="1050" loading="lazy"
+                 alt="The Agus River at Iligan running over a low rapid between forested banks, with a concrete embankment on the right.">
+            <figcaption>The Agus River at Iligan City. Hydroelectric plants have been built along this river system; none appears here, and the study&rsquo;s numbers are not theirs.</figcaption>
+          </figure>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption>Illustrative model results by month, in kilowatts. The last row is in megawatt-hours, at 730 hours a month.</caption>
+            <thead>
+              <tr><th scope="col">Month</th><th scope="col">River output</th><th scope="col">Batch, rescheduled</th><th scope="col">Not covered, flat batch</th><th scope="col">Not covered, rescheduled</th></tr>
+            </thead>
+            <tbody>
+            <tr><th scope="row">January</th><td>172</td><td>47</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">February</th><td>136</td><td>20</td><td>14</td><td>0</td></tr>
+            <tr><th scope="row">March</th><td>99</td><td>0</td><td>51</td><td>11</td></tr>
+            <tr><th scope="row">April</th><td>84</td><td>0</td><td>66</td><td>26</td></tr>
+            <tr><th scope="row">May</th><td>121</td><td>8</td><td>29</td><td>0</td></tr>
+            <tr><th scope="row">June</th><td>180</td><td>54</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">July</th><td>209</td><td>61</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">August</th><td>220</td><td>61</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">September</th><td>211</td><td>61</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">October</th><td>194</td><td>61</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">November</th><td>176</td><td>51</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">December</th><td>180</td><td>54</td><td>0</td><td>0</td></tr>
+            <tr class="total"><th scope="row">Year, MWh</th><td>1,447</td><td>350</td><td>116.8</td><td>27.3</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="method" id="method" aria-labelledby="h-method">
+      <figure class="method-photo">
+        <img src="assets/cdo-river-borja.jpg" width="1600" height="1200" loading="lazy"
+             alt="The Cagayan de Oro River at Carmen, with a steel truss bridge across it and two buildings under construction behind.">
+        <figcaption>The Cagayan de Oro River at Borja Bridge, Carmen. The photograph shows a real river; the study does not use any measurement of it.</figcaption>
+      </figure>
+      <div class="method-text">
+        <h2 id="h-method">How the numbers were made.</h2>
+        <p>The model is a short block at the top of <code>app.js</code>. No data is fetched and nothing is stored; the page is static and does its arithmetic in your browser.</p>
+        <ul class="assumptions">
+          <li><strong>The river.</strong> Twelve monthly values, from 38% of full output in April to 100% in August. The shape is invented to look like a river with a wet and a dry season. It is not taken from any gauge or plant.</li>
+          <li><strong>The room.</strong> A constant 150 kW: 110 kW fixed and 40 kW batch. No growth, no daily pattern.</li>
+          <li><strong>Rescheduling.</strong> Batch work is placed in proportion to the river&rsquo;s spare output above the fixed load, at most 80 kW in any month, with the same yearly total.</li>
+          <li><strong>Left out.</strong> Batteries, grid imports, transmission losses, minimum river flows, cooling, seasonal demand, and the cost of any of it.</li>
+        </ul>
+        <p>Read the result as a direction, not a forecast: moving flexible work towards the wet months removes most of the shortfall, and the fixed load still needs a plan of its own.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <img class="colophon-photo" src="assets/pulangi-maramag.jpg" width="1400" height="1050" loading="lazy" alt="">
+    <div class="colophon-top">
+      <nav aria-label="Footer">
+        <a href="#top">Back to the start</a>
+        <a href="#figures">Figures</a>
+        <a href="#method">Method</a>
       </nav>
-      <div class="masthead-meta">
-        SPEC 2026.3 // OPEN METRICS 1.0
-      </div>
+      <p class="colophon-contact">An interactive study by Niño Redoble, Cagayan de Oro.<br><a href="https://github.com/ninoredoble/aether-report-2026">Source on GitHub</a>, MIT licence.</p>
     </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero-section" id="prologue">
-    <div class="editorial-container">
-      <span class="section-kicker">AUTONOMOUS REGIONAL SYSTEMS // REGION X</span>
-      <h1 class="hero-title">The State of Intelligence &amp; Compute in Northern Mindanao.</h1>
-      <p class="hero-standfirst">
-        In 2026, artificial intelligence shifted from centralized offshore server farms to resilient regional edge meshes. From Cagayan de Oro's automated watershed telemetry to Bukidnon's highland agricultural cooperatives, zero-carbon compute has become an integral civic utility.
-      </p>
-
-      <!-- Key Macro Indicators -->
-      <div class="macro-grid">
-        <div class="macro-card">
-          <span class="m-stat">18.4<small>PFLOPS</small></span>
-          <span class="m-title">Regional Clean Compute</span>
-          <span class="m-desc">Powered by 100% Agus-Pulangi run-of-river hydropower baseload</span>
-        </div>
-        <div class="macro-card">
-          <span class="m-stat">4.2<small>ms</small></span>
-          <span class="m-title">Median Edge Latency</span>
-          <span class="m-desc">Across 14 municipal telemetry networks with p99 &lt; 8.1ms</span>
-        </div>
-        <div class="macro-card">
-          <span class="m-stat">128<small>k</small></span>
-          <span class="m-title">Active Mesh Nodes</span>
-          <span class="m-desc">Ecological sensors spanning watershed, ocean, and grid telemetry</span>
-        </div>
-        <div class="macro-card">
-          <span class="m-stat">91.4<small>%</small></span>
-          <span class="m-title">Carbon Offset Ratio</span>
-          <span class="m-desc">Avoided 42,000 MT CO2e annually compared to thermal clouds</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Story Chapter 1: Compute Topology & Hydropower Dynamics -->
-  <section class="story-chapter bg-glass" id="compute">
-    <div class="editorial-container split-layout">
-      
-      <!-- Narrative Column -->
-      <div class="narrative-col">
-        <span class="section-kicker">HYDROPOWER INFRASTRUCTURE</span>
-        <h2>Run-of-River Baselines: Decoupling Compute From Fossil Grids.</h2>
-        <p>
-          Traditional cloud inference incurs severe ecological debt through thermal power backing. Northern Mindanao inverted this model by colocating high-throughput TPU and GPU clusters directly adjacent to the 138kV sub-transmission switchyards of the Agus IV and Pulangi IV hydroelectric plants.
-        </p>
-        <p>
-          Natural river discharge fluctuations are stabilized via the regional SCADA frequency governor, enabling dynamic compute workloads to modulate clock frequencies with turbine intake velocity. Convective water loops maintain an exceptional Power Usage Effectiveness (PUE) of 1.06 without mechanical refrigerants.
-        </p>
-
-        <div class="stat-callout-row">
-          <div class="stat-callout">
-            <span class="callout-num">412 MW</span>
-            <span class="callout-txt">Firm Hydro Baseload Capacity</span>
-          </div>
-          <div class="stat-callout alt">
-            <span class="callout-num">1.06</span>
-            <span class="callout-txt">Average Data Center PUE</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Interactive Chart Card -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <h4>COMPUTE DENSITY VS. FIRM HYDRO (2024-2026)</h4>
-          <div class="quarter-pills" id="quarterPills">
-            <button class="q-btn" data-q="2024-q1">24 Q1</button>
-            <button class="q-btn" data-q="2024-q3">24 Q3</button>
-            <button class="q-btn" data-q="2025-q1">25 Q1</button>
-            <button class="q-btn" data-q="2025-q3">25 Q3</button>
-            <button class="q-btn" data-q="2026-q1">26 Q1</button>
-            <button class="q-btn active" data-q="2026-q3">26 Q3</button>
-          </div>
-        </div>
-
-        <div class="reactive-chart-wrap">
-          <svg viewBox="0 0 500 230" class="reactive-chart" id="telemetryChart">
-            <!-- Grid lines -->
-            <line x1="40" y1="30" x2="480" y2="30" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
-            <line x1="40" y1="80" x2="480" y2="80" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
-            <line x1="40" y1="130" x2="480" y2="130" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
-            <line x1="40" y1="180" x2="480" y2="180" stroke="rgba(255,255,255,0.06)"/>
-
-            <!-- Hydro Firm Capacity Path -->
-            <path id="pathHydro" d="M 60 160 Q 150 145 240 120 T 420 50" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
-
-            <!-- Edge Compute Density Path -->
-            <path id="pathCompute" d="M 60 175 Q 150 165 240 135 T 420 35" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
-
-            <!-- Data Marker Points (Interactive) -->
-            <g id="chartPoints">
-              <circle cx="60" cy="160" r="4.5" fill="#38bdf8" class="chart-dot" data-idx="0"/>
-              <circle cx="130" cy="148" r="4.5" fill="#38bdf8" class="chart-dot" data-idx="1"/>
-              <circle cx="200" cy="132" r="4.5" fill="#38bdf8" class="chart-dot" data-idx="2"/>
-              <circle cx="270" cy="105" r="4.5" fill="#38bdf8" class="chart-dot" data-idx="3"/>
-              <circle cx="340" cy="75" r="4.5" fill="#38bdf8" class="chart-dot" data-idx="4"/>
-              <circle cx="420" cy="50" r="6" fill="#38bdf8" class="chart-dot selected" data-idx="5"/>
-
-              <circle cx="60" cy="175" r="4.5" fill="#34d399" class="chart-dot" data-idx="0"/>
-              <circle cx="130" cy="168" r="4.5" fill="#34d399" class="chart-dot" data-idx="1"/>
-              <circle cx="200" cy="150" r="4.5" fill="#34d399" class="chart-dot" data-idx="2"/>
-              <circle cx="270" cy="115" r="4.5" fill="#34d399" class="chart-dot" data-idx="3"/>
-              <circle cx="340" cy="70" r="4.5" fill="#34d399" class="chart-dot" data-idx="4"/>
-              <circle cx="420" cy="35" r="6" fill="#34d399" class="chart-dot selected" data-idx="5"/>
-            </g>
-
-            <text x="50" y="205" class="axis-lbl">2024 Q1</text>
-            <text x="190" y="205" class="axis-lbl">2025 Q1</text>
-            <text x="330" y="205" class="axis-lbl">2026 Q1</text>
-            <text x="400" y="205" class="axis-lbl">2026 Q3</text>
-          </svg>
-        </div>
-
-        <div class="chart-legend">
-          <div class="leg-item"><span class="leg-swatch hydro-swatch"></span> Hydro Firm Capacity (MW)</div>
-          <div class="leg-item"><span class="leg-swatch compute-swatch"></span> Edge Compute Density (PFLOPS)</div>
-        </div>
-
-        <div class="chart-dossier" id="chartDossier">
-          <div>
-            <strong id="dossierQuarter">2026 Q3 BENCHMARK:</strong>
-            <span id="dossierDetails">Firm Load: 412 MW // Compute: 18.4 PFLOPS // PUE: 1.06 // Offset: 42,800 MT CO2e</span>
-          </div>
-          <span style="color: var(--accent-mint); font-weight:700;">VERIFIED 100% HYDRO</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Story Chapter 2: Regional Topology & Node Clusters -->
-  <section class="story-chapter" id="clusters">
-    <div class="editorial-container">
-      <div class="section-intro">
-        <span class="section-kicker">DISTRIBUTED ARCHITECTURE</span>
-        <h2>Five Autonomous Edge Clusters Across Northern Mindanao.</h2>
-        <p>
-          Rather than concentrating compute in a single metropolitan datacenter, regional intelligence is distributed across five specialized topographical nodes directly interfacing with local environmental networks.
-        </p>
-      </div>
-
-      <div class="cluster-grid" id="clusterGrid">
-        <!-- Node 1 -->
-        <div class="cluster-card active" data-node="tagoloan">
-          <div class="node-header">
-            <div class="node-title">
-              <h4>Tagoloan Industrial Edge</h4>
-              <span>PHIVIDEC Industrial Hub // 138kV Tie</span>
-            </div>
-            <span class="node-spec-badge">6.2 PFLOPS</span>
-          </div>
-          <div class="node-metrics">
-            <div class="n-met">
-              <span class="n-met-val">2.8 ms</span>
-              <span class="n-met-lbl">MEDIAN LATENCY</span>
-            </div>
-            <div class="n-met">
-              <span class="n-met-val">100% PULANGI</span>
-              <span class="n-met-lbl">ENERGY DISPATCH</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Node 2 -->
-        <div class="cluster-card" data-node="cdo">
-          <div class="node-header">
-            <div class="node-title">
-              <h4>Cagayan Basin Telemetry Hub</h4>
-              <span>Carmen Valley // Alluvial Sensor Link</span>
-            </div>
-            <span class="node-spec-badge">3.1 PFLOPS</span>
-          </div>
-          <div class="node-metrics">
-            <div class="n-met">
-              <span class="n-met-val">3.4 ms</span>
-              <span class="n-met-lbl">MEDIAN LATENCY</span>
-            </div>
-            <div class="n-met">
-              <span class="n-met-val">FLOOD EARLY-WARN</span>
-              <span class="n-met-lbl">PRIMARY WORKLOAD</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Node 3 -->
-        <div class="cluster-card" data-node="kitanglad">
-          <div class="node-header">
-            <div class="node-title">
-              <h4>Mount Kitanglad High Node</h4>
-              <span>Elev. 1,800m // Agro Satellite Ground Link</span>
-            </div>
-            <span class="node-spec-badge">2.4 PFLOPS</span>
-          </div>
-          <div class="node-metrics">
-            <div class="n-met">
-              <span class="n-met-val">4.9 ms</span>
-              <span class="n-met-lbl">MEDIAN LATENCY</span>
-            </div>
-            <div class="n-met">
-              <span class="n-met-val">FAO-56 AGRO-MET</span>
-              <span class="n-met-lbl">PRIMARY WORKLOAD</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Node 4 -->
-        <div class="cluster-card" data-node="macajalar">
-          <div class="node-header">
-            <div class="node-title">
-              <h4>Macajalar Bay Marine Array</h4>
-              <span>Initao-Jasaan Marine Protected Sanctuary</span>
-            </div>
-            <span class="node-spec-badge">1.8 PFLOPS</span>
-          </div>
-          <div class="node-metrics">
-            <div class="n-met">
-              <span class="n-met-val">5.1 ms</span>
-              <span class="n-met-lbl">MEDIAN LATENCY</span>
-            </div>
-            <div class="n-met">
-              <span class="n-met-val">CORAL BLEACH / DHW</span>
-              <span class="n-met-lbl">PRIMARY WORKLOAD</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Node 5 -->
-        <div class="cluster-card" data-node="iligan">
-          <div class="node-header">
-            <div class="node-title">
-              <h4>Iligan Hydro-Compute Campus</h4>
-              <span>Agus IV Hydro Substation // High-Throughput</span>
-            </div>
-            <span class="node-spec-badge">4.9 PFLOPS</span>
-          </div>
-          <div class="node-metrics">
-            <div class="n-met">
-              <span class="n-met-val">2.1 ms</span>
-              <span class="n-met-lbl">MEDIAN LATENCY</span>
-            </div>
-            <div class="n-met">
-              <span class="n-met-val">MODEL TRAINING</span>
-              <span class="n-met-lbl">PRIMARY WORKLOAD</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="nodeDossierBox" style="margin-top: 18px; padding: 18px 24px; background: var(--bg-card); border: 1px solid var(--border-active); border-radius: var(--radius-md); font-size: 13.5px; color: var(--text-main); line-height: 1.6;">
-        <strong style="color: var(--accent-teal);" id="dossierNodeTitle">TAGOLOAN INDUSTRIAL EDGE CLUSTER</strong>
-        <p id="dossierNodeDesc" style="margin-top: 6px; color: var(--text-muted); font-size: 13px;">
-          Colocated at the PHIVIDEC industrial sub-transmission substation. Houses 128 modular edge compute server cabinets cooled with ambient river heat exchangers. Directly drives predictive load balancing for industrial heavy fabrication and aluminum processing.
-        </p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Story Chapter 3: Interactive In-Context AI Agent (Aether Auditor) -->
-  <section class="story-chapter bg-glass" id="auditor">
-    <div class="editorial-container">
-      <div class="section-intro text-center">
-        <span class="section-kicker">AUTONOMOUS AUDITOR</span>
-        <h2>Interrogate the 2026 Regional Telemetry via Embedded AI Agent.</h2>
-        <p class="standfirst">
-          An in-context micro-agent initialized with the complete empirical dataset across all seven portfolio engineering initiatives:
-        </p>
-      </div>
-
-      <div class="auditor-shell">
-        <!-- Suggested Questions -->
-        <div class="query-pills">
-          <button class="pill" onclick="askAuditor('What is the carbon footprint and hydro baseload of CDO edge models?')">Hydro &amp; Carbon Offset</button>
-          <button class="pill" onclick="askAuditor('How is Cagayan Basin flood early-warning telemetry integrated?')">Cagayan Watershed Telemetry</button>
-          <button class="pill" onclick="askAuditor('What are the Degree Heating Weeks and marine bathymetry metrics in Macajalar Bay?')">Marine Cadence &amp; Bleaching</button>
-          <button class="pill" onclick="askAuditor('How does the 138kV SCADA power grid physics simulator prevent under-frequency blackouts?')">SCADA Grid Mesh Physics</button>
-          <button class="pill" onclick="askAuditor('How does ClimaPocket Android compute offline FAO-56 evapotranspiration?')">ClimaPocket Android Engine</button>
-          <button class="pill" onclick="askAuditor('How does the Hablon textile archive preserve indigenous geometric symmetries?')">Hablon Textile Symmetries</button>
-          <button class="pill" onclick="askAuditor('How does Relay Core API guarantee idempotent webhook dispatch?')">Relay API &amp; Redis Ledger</button>
-        </div>
-
-        <!-- Dialogue Stage -->
-        <div class="dialogue-box" id="dialogueBox">
-          <div class="msg-row agent-row">
-            <span class="msg-avatar">AE</span>
-            <div class="msg-bubble">
-              Hello. I am the <strong>Aether 2026 In-Context Auditor</strong>. I have empirical access to the 2026 telemetry streams across Northern Mindanao's compute clusters, Agus-Pulangi hydropower switchyards, Cagayan River Basin hydrologic gauges, and marine sensor arrays. How may I clarify this annual report?
-            </div>
-          </div>
-        </div>
-
-        <!-- Input Bar -->
-        <div class="input-bar">
-          <input type="text" id="userInput" placeholder="Ask a question regarding Northern Mindanao's 2026 AI infrastructure..." onkeydown="handleInputKey(event)">
-          <button class="send-btn" onclick="sendUserMessage()">QUERY &rarr;</button>
-        </div>
-
-        <!-- Download Dossier Action -->
-        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-fine); padding-top: 14px;">
-          <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted);">
-            CRYPTOGRAPHIC DIGEST: SHA256:7B8F..2026-AETHER-REGIONAL-TELEMETRY
-          </span>
-          <button id="btnExportAudit" class="btn-export-dossier">DOWNLOAD REGIONAL AUDIT REPORT (JSON)</button>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="annual-footer">
-    <div class="editorial-container footer-flex">
-      <div class="footer-meta">
-        <span class="f-brand">AETHER ANNUAL REPORT &bull; 2026 EDITION</span>
-        <p>Published in Cagayan de Oro, Northern Mindanao. Distributed open-access telemetry and creative engineering case study.</p>
-      </div>
-      <div class="footer-links">
-        <a href="https://github.com/ninoredoble/aether-report-2026" target="_blank" class="repo-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          Open Source Repository &amp; Dataset
-        </a>
-      </div>
+    <div class="colophon-bottom">
+      <p class="colophon-name" aria-hidden="true">Aether Report 2026</p>
+      <p class="credits">Pictures from Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Pulangi_river_in_valencia.jpg">&ldquo;Pulangi river in valencia&rdquo;</a> by arcibald, <a href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Cagayan_De_Oro_River,_Borja_Bridge_Carmen_(Cagayan_De_Oro_City;_12-08-2023).jpg">&ldquo;Cagayan De Oro River, Borja Bridge Carmen&rdquo;</a> by Patrickroque01, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Agus_River,_Iligan_(Lanao_Del_Norte;_10-14-2023).jpg">&ldquo;Agus River, Iligan&rdquo;</a> by Patrickroque01, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Pulangi_River,_Maramag,_Bukidnon,_Philippines_002.jpg">&ldquo;Pulangi River, Maramag, Bukidnon, Philippines 002&rdquo;</a> by Obsidian Soul, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>. Images were resized and compressed.</p>
     </div>
   </footer>
 
+  <noscript><p class="noscript">The chart needs JavaScript. The story and the full table of figures read the same without it.</p></noscript>
   <script src="app.js"></script>
 </body>
 </html>
